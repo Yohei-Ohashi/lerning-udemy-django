@@ -1,0 +1,64 @@
+# docker-compose.yml
+# 目的：
+# - 開発（Mac/Windows）は Docker + uv で“ホストを汚さず”作業
+# - Jupyter Lab を別サービスで提供（同一イメージを再利用）
+# - uv のキャッシュを共有してビルド/起動を高速化
+# - .env で設定を注入（開発/本番で同じ鍵を使わないこと）
+
+services:
+  # ----------------------------------------
+  # 開発用シェル：依存追加・テスト・手動実行など対話用途
+  # ----------------------------------------
+  dev:
+    build:
+      context: .                 # プロジェクトルートをビルドコンテキストに
+      dockerfile: Dockerfile.dev # uv 導入済みの開発用 Dockerfile
+    volumes:
+      - .:/workspace             # ホストのソースをそのままマウント（即時反映）
+      - uv_cache:/root/.cache/uv # uv のダウンロードキャッシュを共有（高速化）
+    working_dir: /workspace      # コンテナ入ってすぐ作業できるようにルートへ
+    tty: true                    # 対話シェルを使えるように TTY を付与
+    command: >
+      bash -lc "uv sync && bash"
+      # 起動時に依存同期（pyproject.toml/uv.lock から）
+      # その後 bash へ。依存のズレが起こりにくくなる
+    env_file:
+      - .env                     # .env を注入（APIキーなど）
+
+  # ----------------------------------------
+  # Jupyter Lab：ブラウザでノートブック作業
+  # ----------------------------------------
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev # dev と同じイメージ（環境の差異をなくす）
+    command: >
+      bash -lc "uv sync && uv run jupyter lab
+      --ip=0.0.0.0 --port=8888 --allow-root
+      --ServerApp.token='${JUPYTER_TOKEN}'"
+      # 起動時に依存同期 → uv 経由で Jupyter を実行
+      # token は .env の JUPYTER_TOKEN を使用（空なら無認証※開発専用）
+    ports:
+      - "8888:8888"              # ホスト http://localhost:8888 でアクセス
+    volumes:
+      - .:/workspace
+      - uv_cache:/root/.cache/uv
+    working_dir: /workspace
+    tty: true
+    restart: unless-stopped      # 落ちても自動復帰（開発の利便性優先）
+    env_file:
+      - .env
+    healthcheck:
+      # 8888 に応答があれば healthy 判定（待ち合わせや自動化で便利）
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8888/ || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
+
+# ----------------------------------------
+# 名前付きボリューム：
+# uv のキャッシュをコンテナ間・再起動間で共有
+# ----------------------------------------
+volumes:
+  uv_cache:

@@ -13,9 +13,12 @@ services:
     build:
       context: .                 # プロジェクトルートをビルドコンテキストに
       dockerfile: Dockerfile.dev # uv 導入済みの開発用 Dockerfile
+    ports:
+      - "8000:8000"              # ホスト http://localhost:8000 でDjangoサーバーにアクセス
     volumes:
       - .:/workspace             # ホストのソースをそのままマウント（即時反映）
       - uv_cache:/root/.cache/uv # uv のダウンロードキャッシュを共有（高速化）
+      - venv_dev:/workspace/.venv # .venvをホストから分離（クロスプラットフォーム対応）
     working_dir: /workspace      # コンテナ入ってすぐ作業できるようにルートへ
     tty: true                    # 対話シェルを使えるように TTY を付与
     command: >
@@ -43,6 +46,7 @@ services:
     volumes:
       - .:/workspace
       - uv_cache:/root/.cache/uv
+      - venv_jupyter:/workspace/.venv # .venvをホストから分離（クロスプラットフォーム対応）
     working_dir: /workspace
     tty: true
     restart: unless-stopped      # 落ちても自動復帰（開発の利便性優先）
@@ -62,3 +66,5 @@ services:
 # ----------------------------------------
 volumes:
   uv_cache:
+  venv_dev:
+  venv_jupyter:

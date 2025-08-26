@@ -11,3 +11,27 @@ value = 1
 # value = 10
 # print(value // 3) # 3
 # print(value % 3) # 1
+
+value += 3 # value = value + 3
+""" value -= 2 # value = value - 2 """
+
+# print(value)
+# print(value ** 3) # 64
+
+# 浮動小数点
+height = 175.5
+
+print(height)
+print(type(height))
+print(height + 10) # 175.5 + 10.0
+
+value = 8
+print(value >> 2)
+print(value >> 3)
+
+print(12 & 21)
+print(12 | 21)
+
+value = 12
+value &= 21 # value = value & 21]
+print(value)

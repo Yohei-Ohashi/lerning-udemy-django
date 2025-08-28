@@ -64,3 +64,27 @@ print(msg_r)
 
 msg = 'hello WoRld'
 print(msg.capitalize())
+
+# 文字列の一部取り出し、format, isloewr, isupper
+
+msg = 'hello, my name is taro'
+print(msg[1:10:3])
+print('hello {}'.format('Taro'))
+name = 'Jiro'
+print(f'hello {name}') # 3.6以上
+print(f'hello {name=}') # 3.8以上
+
+msg = 'APPLE'
+print(msg.islower())
+print(msg.isupper())
+
+# find, index, rfind, rindex
+
+msg = 'ABCDEABC'
+print(msg.find('ABC'))
+print(msg.rfind('ABC'))
+print(msg.index('ABC'))
+print(msg.rindex('ABC'))
+
+print(msg.find('ABCE'))
+print(msg.index('ABCE'))

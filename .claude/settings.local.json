@@ -12,7 +12,8 @@
       "Bash(mkdir:*)",
       "Bash(mv:*)",
       "Bash(cp:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(docker rm:*)"
     ],
     "deny": []
   }

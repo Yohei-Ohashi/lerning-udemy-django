@@ -3,7 +3,11 @@
     "allow": [
       "Bash(docker compose:*)",
       "Bash(docker image:*)",
-      "Bash(docker run:*)"
+      "Bash(docker run:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(git subtree:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

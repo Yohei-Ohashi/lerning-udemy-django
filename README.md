@@ -1,73 +1,51 @@
-# uv-on-docker-lab
+# Simple Docker + uv Python Environment
 
-uvとDockerを使用したPython開発環境のサンプルプロジェクトです。
+Mac・Windows（開発）+ Windows Server 2016（本番）のハイブリッド環境
 
-## 概要
+## 使い方
 
-このプロジェクトは、uv（高速なPythonパッケージマネージャー）とDockerを組み合わせて、効率的なPython開発環境を構築する方法を示しています。
-
-## 特徴
-
-- **uv**: 高速なPythonパッケージマネージャー
-- **Docker**: コンテナ化された開発環境
-- **開発環境**: ホットリロード対応の開発サーバー
-
-## セットアップ
-
-### 前提条件
-
-- Docker
-- Docker Compose
-
-### 環境設定
-
-初回セットアップ時は環境変数ファイルを作成してください：
-
+### 開発環境（Mac・Windows）
 ```bash
-# .env.exampleをコピーして.envを作成
-cp .env.example .env
+# 対話的Python環境
+docker compose run --rm python
+
+# Pythonスクリプト実行
+docker compose run --rm python uv run python your_script.py
+
+# Jupyter起動
+docker compose --profile jupyter up
+# → http://localhost:8888/?token=simple-token-123
 ```
 
-必要に応じて `.env` ファイルの設定を変更してください。
-- `JUPYTER_TOKEN`: Jupyter Labのアクセストークン（空なら無認証）
-
-### 起動方法
-
+### Cursor + リモートウィンドウ開発
 ```bash
-# 開発環境を起動
-docker-compose up --build
+# 開発用コンテナを起動（バックグラウンド）
+docker compose run -d --name python-dev python sleep infinity
 
-# バックグラウンドで起動
-docker-compose up -d --build
+# Cursorでコンテナにアタッチ
+# Command Palette → "Dev Containers: Attach to Running Container" → python-dev
+
+# 開発終了後、コンテナ削除
+docker rm -f python-dev
 ```
 
-### 停止方法
+### 本番環境（Windows Server 2016）
+```powershell
+# uvをインストール
+Invoke-RestMethod https://astral.sh/uv/install.ps1 | Invoke-Expression
 
-```bash
-# コンテナを停止
-docker-compose down
+# 依存関係インストール・起動
+uv sync
+uv run jupyter lab --ip=0.0.0.0 --port=8888 --no-browser
+
+# Pythonスクリプト実行
+uv run python your_script.py
 ```
 
-## プロジェクト構造
+## 構成
+- `pyproject.toml` - uv依存関係管理
+- `Dockerfile` - Docker環境
+- `docker-compose.yml` - 開発環境
+- `README.md` - このファイル
 
-```
-uv-on-docker-lab/
-├── app/                 # アプリケーションコード
-│   ├── __init__.py
-│   └── main.py
-├── docker-compose.yml   # Docker Compose設定
-├── Dockerfile.dev       # 開発用Dockerfile
-├── pyproject.toml       # Pythonプロジェクト設定
-├── uv.lock             # uv依存関係ロックファイル
-└── README.md           # このファイル
-```
-
-## 開発
-
-Jupyter Labは `http://localhost:8888` でアクセスできます。
-
-コードを変更すると、自動的にホットリロードされます。
-
-## ライセンス
-
-MIT License
+以上！

@@ -12,3 +12,6 @@ wheels/
 .env.local
 .env.*
 !.env.example
+
+# macOS system files
+.DS_Store

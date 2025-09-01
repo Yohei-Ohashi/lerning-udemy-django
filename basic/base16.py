@@ -33,3 +33,60 @@ if gender == "woman" and age > 20:
 # if gender != "man":
 if not gender == "man":
     print("男性ではない")
+
+# is, is not(同じオブジェクトか→同じメモリ上にあるもの)
+a = [1, 2, 3]
+b = [1, 2, 3]
+c = a
+
+print(id(a))
+print(id(b))
+print(id(c))
+
+print(a == b)  # True
+print(a == c)  # True
+
+print(a is b)  # False
+print(a is c)  # True
+
+print(a is not b)  # True
+print(a is not c)  # False
+
+if a is b:
+    print("aとbは同じオブジェクトです。")
+
+a = None  # noneTypeクラスのオブジェクト。Noneという値しかない
+
+# a == Noneという書き方もできるが、慣習的に効率的なのでis Noneと書く
+if a is None:
+    print("aはNoneです。")
+
+# isinstance: あるクラスの方の変数かチェック
+age = 25
+name = "田中"
+scores = [80, 90]
+print(isinstance(age, int))
+print(isinstance(name, str))
+print(isinstance(scores, list))
+
+if isinstance(age, int) and age > 20:
+    pass
+
+if 0 <= age <= 60:
+    print("ageは0以上、60以下")
+
+# 3項演算子
+status = "成人" if age >= 20 else "未成年"
+
+print(status)
+
+
+# in not in
+fruits = ["りんご", "バナナ", "オレンジ"]
+print("りんご" in fruits)  # True
+print("ぶどう" not in fruits)  # True
+
+car = {"brand": "トヨタ", "model": "Prius"}
+
+if "トヨタ" in car.values():
+    print(car["brand"])

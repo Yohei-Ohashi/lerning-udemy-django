@@ -1,4 +1,6 @@
 # try except
+# else: エラーがない場合に実行
+# finally: エラーのあるなしに関わらず実行
 
 try:
     b = [10, 20, 30]
@@ -16,5 +18,14 @@ except IndexError as e:
 except Exception as e:
     print("その他の例外")
     print("Exception: ", e, type(e))
-    
+else:  # 例外がない場合に実行
+    print("Else の処理が実行されました")
+finally:  # 例外の実行あるなしに関わらず実行
+    print("Finally の処理が実行されました")
+ 
 print("処理が完了しました。")
+
+# 例外処理の使い所例
+# ネットワークで、外部データを取得
+# インターネットに接続できない→例外→通知
+# 画像ファイルを指定してAIで顔認識をする→画像ファイルが存在しない→例外→通知

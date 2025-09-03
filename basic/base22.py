@@ -10,6 +10,7 @@ try:
     print(f"aの値: {a}")
 except ZeroDivisionError as e:
     import traceback
+
     traceback.print_exc()
     print(e, type(e))
     print(f"0で割らないでください: {e}")
@@ -22,7 +23,7 @@ else:  # 例外がない場合に実行
     print("Else の処理が実行されました")
 finally:  # 例外の実行あるなしに関わらず実行
     print("Finally の処理が実行されました")
- 
+
 print("処理が完了しました。")
 
 # 例外処理の使い所例

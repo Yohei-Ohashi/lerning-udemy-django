@@ -1,64 +1,79 @@
-import time
+# リスト内包表記
+
+numbers = [1, 2, 3, 4, 5]
+squares = [x**2 for x in numbers]
+print(squares)
+
+result = [x if x > 0 else 0 for x in range(-2, 3)]
+print(result)
 
 
-def decorator_func(func):
-    def wrap():
-        print("計測開始")
-        start_time = time.time()
-        func()
-        func()
-        func()
-        end_time = time.time()
-        print("計測終了")
-        print(f"計測時間: {end_time - start_time:.6f}秒")
+# 辞書内包表記
 
-    return wrap
+words = ["apple", "banana", "cherry"]
+word_lengths = {word: len(word) for word in words}
+print("単語の長さ:", word_lengths)
+
+scores = {"Alice": 85, "Bob": 72, "Charlie": 90}
+passed = {name: score for name, score in scores.items() if score > 80}
+print(passed)
 
 
-# a = decorator_func(print)
-# a()
-@decorator_func
-def introduce():
-    print("私は田中です。")
+# 集合内包表記
+
+import math
+from operator import length_hint
+from re import X
+from unittest import TextTestResult
+
+sqrt_set = {math.sqrt(x) for x in range(10)}
+print(sqrt_set, type(sqrt_set))
+
+text = "Hello world programming"
+vowels = {char.lower() for char in text if char.lower() in "aiueo"}
+print(vowels)
 
 
-# introduce = decorator_func(introduce)
-introduce()
+# ジェネレータ内包表記
+large_numbers = (x**2 for x in range(1000000) if x % 1000 == 0)
+for _ in range(5):
+    print(next(large_numbers))
 
 
-def log_calls(func):
-    def wrapper(*args, **kwargs):
-        print(args, kwargs)
-        result = func(*args, **kwargs)
-        print(f"完了: {result}")
-        return result
-
-    return wrapper
-
-
-@log_calls
-def add(a, b):
-    return a + b
+def is_prime(n):
+    if n <= 1:
+        return False
+    for i in range(2, n):
+        if n % i == 0:
+            return False
+    return True
 
 
-print(add(2, 3))
+prime_numbers = (x for x in range(1, 100) if is_prime(x))
+print(next(prime_numbers))
+print(next(prime_numbers))
+print(next(prime_numbers))
+print(next(prime_numbers))
 
 
-def repeat(times):
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            for i in range(times):
-                print(f"{i + 1}回目")
-                func(*args, **kwargs)
+# セイウチ演算子
+numbers = list(range(1, 11))
+expensive_calc = [(n, result) for n in numbers if (result := n**2 + n * 3) > 20]
+print(expensive_calc)
 
-        return wrapper
+texts = ["apple", "banana", "cherry", "pine"]
+long_words = {word: length for word in texts if (length := len(word)) > 4}
+print(long_words)
 
-    return decorator
+sales_data = [
+    {"product": "A", "price": 100, "quantity": 5},
+    {"product": "B", "price": 200, "quantity": 3},
+    {"product": "C", "price": 300, "quantity": 6},
+]
 
-
-@repeat(3)
-def say_hello(name):
-    print(f"こんにちは、{name}さん")
-
-
-say_hello("太郎")
+high_revenue = {
+    item["product"]: revenue
+    for item in sales_data
+    if (revenue := item["price"] * item["quantity"]) > 500
+}
+print(high_revenue)

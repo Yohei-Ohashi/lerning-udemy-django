@@ -1,30 +1,23 @@
-def factorial(n):
-    if n <= 1:
-        return 1
-    result = 1
-    for i in range(1, n + 1):
-        result *= i
-    return result
-    # if n <= 1:
-    #     return 1
-    # else:
-    #     return n * factorial(n - 1)
+# リスト内包表記
+
+numbers = [1, 2, 3, 4, 5]
+squares = [x ** 2 for x in numbers]
+print(squares)
+
+result = [x if x > 0 else 0 for x in range(-2, 3)]
+print(result)
 
 
-print(factorial(5))
-print(factorial(4))
+# 辞書内包表記
 
+words = ["apple", "banana", "cherry"]
+word_lengths = {word: len(word) for word in words}
+print("単語の長さ:", word_lengths)
 
-def fibonacci(n):
-    first = 0
-    second = 1
-    for _ in range(n):
-        first, second = second, first + second
-    return first
-
-    # if n < 2:
-    #     return n
-    # return fibonacci(n - 1) + fibonacci(n - 2)
-
-
-print(fibonacci(5))
+scores = {"Alice": 85, "Bob": 72, "Charlie": 90}
+passed = {
+    name: score
+    for name, score in scores.items()
+    if score > 80
+}
+print(passed)

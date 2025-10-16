@@ -64,6 +64,9 @@ class ClassProcessor(GradeProcessor):
 class SchoolProcessor(GradeProcessor):
     """学校全体の処理(外側のループに相当)"""
 
+    def __init_(self):
+        super().__init__()
+
     def calculate_average(self, classes):
         # 外側のループと同じ
         for class_name, students in classes.items():
